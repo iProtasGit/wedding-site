@@ -72,16 +72,9 @@ backend/config.json
 
 Контейнеру понадобятся ключи доступа к Google Sheets и файл конфигурации.
 
-1. Подключитесь к вашему серверу (VPS) по SSH:
-   ```bash
-   ssh root@ВАШ_IP_АДРЕС
-   ```
-2. Создайте папку для приложения:
-   ```bash
-   mkdir -p /opt/wedding-app
-   cd /opt/wedding-app
-   ```
-3. В папку `/opt/wedding-app/backend` (создайте ее, если нет) вам нужно загрузить два файла:
+1. Подключитесь к вашему серверу (VPS) по SSH.
+2. Исходный код проекта (папка `wedding-site`) должен лежать на сервере.
+3. В папке `backend` вам нужно иметь два файла:
    - `config.json` (с вашим Spreadsheet ID и Telegram токенами).
    - `credentials.json` (ключ от Google Service Account).
 
@@ -90,7 +83,7 @@ backend/config.json
    {
      "port": ":8080",
      "spreadsheetId": "ВАШ_SPREADSHEET_ID",
-     "credentialsFile": "data/credentials.json",
+     "credentialsFile": "credentials.json",
      "tgBotToken": "ВАШ_ТОКЕН_БОТА",
      "tgChatId": "ВАШ_CHAT_ID"
    }
@@ -100,29 +93,28 @@ backend/config.json
 
 Использование `docker-compose` — самый удобный способ запустить контейнер и пробросить нужные файлы.
 
-Создайте файл `docker-compose.yml` в папке `/opt/wedding-app` на сервере:
+Файл `docker-compose.yml` в папке `wedding-site` на сервере:
 
 ```yaml
 version: '3.8'
 
 services:
   wedding-app:
-    build: . # Если вы собираете образ прямо на сервере
-    # image: ваш-dockerhub/wedding-app:latest # Если вы используете готовый образ
+    build: . 
     container_name: wedding-app
     restart: unless-stopped
     ports:
       - "8080:8080" # Проброс 8080 порта сервера на 8080 порт приложения
     volumes:
       - ./backend/config.json:/app/config.json
-      - ./backend/credentials.json:/app/data/credentials.json
+      - ./backend/credentials.json:/app/credentials.json
 ```
 
 ## 4. Сборка и старт
 
-1. Перенесите исходный код проекта на сервер (например, через `git clone` или `scp`).
-2. Перейдите в папку с проектом и выполните команду:
+1. Перейдите в папку с проектом и выполните команду:
    ```bash
+   docker compose down -v # Обязательно очищаем старые конфликтующие тома!
    docker compose up -d --build
    ```
 3. Docker скачает нужные образы, соберет фронтенд, скомпилирует Go-сервер и запустит приложение в фоновом режиме.

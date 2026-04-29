@@ -9,4 +9,4 @@ services:
       - "8080:8080"
     volumes:
       - ./backend/config.json:/app/config.json
-      - ./backend/credentials.json:/app/data/credentials.json
+      - ./backend/credentials.json:/app/credentials.json
