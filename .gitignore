@@ -1,0 +1,30 @@
+# Configuration files and secrets
+backend/config.json
+backend/credentials.json
+
+# Go compiled binaries and cache
+backend/server
+backend/server.exe
+backend/vendor/
+backend/*.o
+backend/*.a
+backend/*.so
+
+# Node.js dependencies and logs
+frontend/node_modules/
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+# Next.js build output
+frontend/.next/
+frontend/out/
+frontend/build/
+
+# IDE specific files
+.idea/
+.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db

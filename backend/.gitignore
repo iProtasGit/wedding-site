@@ -1,0 +1,17 @@
+# Конфигурационные файлы (ОБЯЗАТЕЛЬНО ИСКЛЮЧИТЬ!)
+config.json
+credentials.json
+
+# Скомпилированные бинарные файлы
+server
+server.exe
+
+# Go-кеш и временные файлы
+*.o
+*.a
+*.so
+vendor/
+
+# Логи и временные файлы macOS/Windows
+.DS_Store
+Thumbs.db
