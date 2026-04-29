@@ -3,7 +3,7 @@ backend/config.json
 backend/credentials.json
 
 # Go compiled binaries and cache
-backend/server
+# We must ONLY ignore the exact binary files, NOT the word "server" which blocks the folder cmd/server
 backend/server.exe
 backend/vendor/
 backend/*.o

@@ -6,7 +6,6 @@ frontend/build/
 .idea/
 .vscode/
 *.exe
-backend/server
 backend/server.exe
 backend/credentials.json
 backend/config.json
