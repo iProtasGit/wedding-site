@@ -1,0 +1,12 @@
+node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+.git/
+.idea/
+.vscode/
+*.exe
+backend/server
+backend/server.exe
+backend/credentials.json
+backend/config.json

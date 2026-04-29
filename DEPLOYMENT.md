@@ -51,6 +51,23 @@ EXPOSE 8080
 CMD ["/app/server"]
 ```
 
+## Важно: Файл .dockerignore
+Для того, чтобы Docker работал корректно и не тянул лишние или заблокированные файлы (особенно если они скрыты в .gitignore), обязательно создайте файл `.dockerignore` в корне проекта со следующим содержимым:
+```
+node_modules
+.next
+out
+build
+.git
+.idea
+.vscode
+*.exe
+data/
+backend/server
+backend/credentials.json
+backend/config.json
+```
+
 ## 2. Настройка конфигурации на сервере
 
 Контейнеру понадобятся ключи доступа к Google Sheets и файл конфигурации.
