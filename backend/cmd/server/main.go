@@ -15,12 +15,28 @@ import (
 )
 
 func main() {
-	cfg, err := config.LoadConfig("config.json")
-	if err != nil {
-		cfg, err = config.LoadConfig("../../config.json")
-		if err != nil {
-			log.Fatalf("Failed to load config: %v", err)
+	// Try standard paths first
+	cfgPaths := []string{
+		"config.json",       // inside docker root if mounted at /app/config.json
+		"../config.json",    // if somehow run from backend root
+		"../../config.json", // local dev running from cmd/server
+		"data/config.json",  // mounted volume path if not mapped directly to root
+		"/app/config.json",  // absolute docker path
+	}
+
+	var cfg *config.Config
+	var err error
+
+	for _, path := range cfgPaths {
+		cfg, err = config.LoadConfig(path)
+		if err == nil {
+			log.Printf("Successfully loaded config from: %s\n", path)
+			break
 		}
+	}
+
+	if cfg == nil {
+		log.Fatalf("Failed to load config from any known paths. Last error: %v", err)
 	}
 
 	repo, err := repository.NewSheetsRepository(cfg.CredentialsFile, cfg.SpreadsheetID)
@@ -50,12 +66,17 @@ func main() {
 	api := app.Group("/api")
 	api.Post("/rsvp", handler.HandleRSVP)
 
-	// Serve static frontend files
-	app.Static("/", "../frontend/out")
+	// Serve static frontend files (Works for both local and Docker)
+	app.Static("/", "frontend/out")    // Docker path
+	app.Static("/", "../frontend/out") // Local path fallback
 
 	// Fallback to index.html for SPA routing if needed
 	app.Get("*", func(c *fiber.Ctx) error {
-		return c.SendFile("../frontend/out/index.html")
+		err := c.SendFile("frontend/out/index.html")
+		if err != nil {
+			return c.SendFile("../frontend/out/index.html")
+		}
+		return nil
 	})
 
 	log.Printf("Server starting on port %s\n", cfg.Port)

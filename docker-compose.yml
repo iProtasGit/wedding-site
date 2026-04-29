@@ -2,12 +2,11 @@ version: '3.8'
 
 services:
   wedding-app:
-    build: . # Если вы собираете образ прямо на сервере
-    # image: ваш-dockerhub/wedding-app:latest # Если вы используете готовый образ
+    build: .
     container_name: wedding-app
     restart: unless-stopped
     ports:
-      - "80:8080" # Проброс 80 порта сервера на 8080 порт приложения
+      - "8080:8080"
     volumes:
       - ./data/config.json:/app/config.json
       - ./data/credentials.json:/app/data/credentials.json

@@ -54,16 +54,16 @@ CMD ["/app/server"]
 ## Важно: Файл .dockerignore
 Для того, чтобы Docker работал корректно и не тянул лишние или заблокированные файлы (особенно если они скрыты в .gitignore), обязательно создайте файл `.dockerignore` в корне проекта со следующим содержимым:
 ```
-node_modules
-.next
-out
-build
-.git
-.idea
-.vscode
+node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+.git/
+.idea/
+.vscode/
 *.exe
-data/
 backend/server
+backend/server.exe
 backend/credentials.json
 backend/config.json
 ```
@@ -112,7 +112,7 @@ services:
     container_name: wedding-app
     restart: unless-stopped
     ports:
-      - "80:8080" # Проброс 80 порта сервера на 8080 порт приложения
+      - "8080:8080" # Проброс 8080 порта сервера на 8080 порт приложения
     volumes:
       - ./data/config.json:/app/config.json
       - ./data/credentials.json:/app/data/credentials.json
