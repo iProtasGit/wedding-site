@@ -8,5 +8,5 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./data/config.json:/app/config.json
-      - ./data/credentials.json:/app/data/credentials.json
+      - ./backend/config.json:/app/config.json
+      - ./backend/credentials.json:/app/data/credentials.json
