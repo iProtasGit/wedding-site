@@ -209,9 +209,9 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-12 text-pastel-text">
             <div className="p-6 bg-pastel-background rounded-xl shadow-sm border border-pastel-green/20">
               <h3 className="text-2xl mb-4 font-playfair">Где и Когда</h3>
+              <p className="text-lg mt-4 font-medium">{config.venue}</p>
               <p className="text-lg mb-2">{config.dateText}</p>
               <p className="text-lg mb-2">Начало: {config.timeText}</p>
-              <p className="text-lg mt-4 font-medium">{config.venue}</p>
             </div>
             <div className="p-6 bg-pastel-background rounded-xl shadow-sm border border-pastel-green/20">
               <h3 className="text-2xl mb-4 font-playfair">Трансфер</h3>
