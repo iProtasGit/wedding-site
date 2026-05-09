@@ -36,7 +36,9 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o server ./cmd/server/main.go
 # Финальный легковесный образ
 FROM alpine:latest
 # Устанавливаем корневые сертификаты (обязательно для работы Telegram API / HTTPS)
-RUN apk --no-cache add ca-certificates
+RUN apk --no-cache add ca-certificates tzdata
+# Устанавливаем временную зону по умолчанию (MSK)
+ENV TZ=Europe/Moscow
 WORKDIR /app
 
 # Копируем собранный сервер
@@ -73,8 +75,9 @@ backend/config.json
 Контейнеру понадобятся ключи доступа к Google Sheets и файл конфигурации.
 
 1. Подключитесь к вашему серверу (VPS) по SSH.
-2. Исходный код проекта (папка `wedding-site`) должен лежать на сервере.
-3. В папке `backend` вам нужно иметь два файла:
+2. Исходный код проекта (папка `wedding-site`) должен лежать на сервере, например, в `/opt/wedding-app/wedding-site`.
+3. В папке `wedding-site` уже есть папка `data` (`/opt/wedding-app/wedding-site/data`).
+4. В эту папку `data` вам нужно поместить два файла:
    - `config.json` (с вашим Spreadsheet ID и Telegram токенами).
    - `credentials.json` (ключ от Google Service Account).
 
@@ -83,11 +86,15 @@ backend/config.json
    {
      "port": ":8080",
      "spreadsheetId": "ВАШ_SPREADSHEET_ID",
-     "credentialsFile": "credentials.json",
+     "credentialsFile": "data/credentials.json",
      "tgBotToken": "ВАШ_ТОКЕН_БОТА",
-     "tgChatId": "ВАШ_CHAT_ID"
+     "tgChatId": "ВАШ_CHAT_ID",
+     "tgCountdownChatId": "ID_ЧАТА_ДЛЯ_ОТСЧЕТА",
+     "tgCountdownTopicId": "ID_ТОПИКА_ЕСЛИ_НУЖНО",
+     "weddingDate": "2026-08-08T15:00:00"
    }
    ```
+   **ВНИМАНИЕ:** Убедитесь, что файлы `config.json` и `credentials.json` удалены из папки `backend` во избежание конфликтов!
 
 ## 3. Запуск через Docker Compose (Рекомендуется)
 
@@ -104,15 +111,15 @@ services:
     container_name: wedding-app
     restart: unless-stopped
     ports:
-      - "8080:8080" # Проброс 8080 порта сервера на 8080 порт приложения
+      - "80:8080" # ВАЖНО: Мы пробрасываем стандартный 80 порт сервера на 8080 порт приложения!
     volumes:
-      - ./backend/config.json:/app/config.json
-      - ./backend/credentials.json:/app/credentials.json
+      - ./data/config.json:/app/config.json
+      - ./data/credentials.json:/app/data/credentials.json
 ```
 
 ## 4. Сборка и старт
 
-1. Перейдите в папку с проектом и выполните команду:
+1. Перейдите в папку с проектом (`/opt/wedding-app/wedding-site`) и выполните команду:
    ```bash
    docker compose down -v # Обязательно очищаем старые конфликтующие тома!
    docker compose up -d --build

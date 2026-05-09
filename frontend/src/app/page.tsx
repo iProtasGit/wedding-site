@@ -298,7 +298,7 @@ export default function Home() {
                         onChange={(e) => updateGuest(guest.id, "transfer", e.target.checked)}
                         className="rounded border-pastel-green text-pastel-greenDark focus:ring-pastel-greenDark w-5 h-5 accent-pastel-greenDark"
                       />
-                      <span className="text-pastel-text font-medium text-lg">Нужен трансфер?</span>
+                      <span className="text-pastel-text font-medium text-lg">Нужен ли трансфер до основной площадки?</span>
                     </label>
                   </div>
                 </div>
@@ -333,6 +333,33 @@ export default function Home() {
               {isSubmitting ? "Отправка..." : "Отправить ответ"}
             </button>
           </form>
+        </div>
+      </section>
+
+      {/* Telegram Chat Section */}
+      <section className="py-16 px-4 bg-white text-center">
+        <div className="max-w-xl mx-auto p-8 rounded-2xl border border-pastel-green/30 bg-pastel-background/50 shadow-sm">
+          <h3 className="text-2xl mb-4 text-pastel-text font-playfair">Телеграм-чат нашей свадьбы</h3>
+          <p className="text-pastel-text/80 mb-6">Присоединяйтесь к нашему чату, чтобы быть в курсе всех новостей, задавать вопросы и общаться с другими гостями!</p>
+          
+          <div className="flex justify-center mb-6">
+            <div className="bg-white p-4 rounded-xl shadow-sm border border-pastel-green/40">
+              <img 
+                src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://t.me/+z-9PzQAR3pEzNTMy&color=4a5d4e&bgcolor=ffffff" 
+                alt="QR Code Telegram" 
+                className="w-48 h-48"
+              />
+            </div>
+          </div>
+          
+          <a 
+            href="https://t.me/+z-9PzQAR3pEzNTMy" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-block py-3 px-8 rounded-xl font-medium bg-white text-pastel-greenDark border border-pastel-greenDark hover:bg-pastel-greenDark hover:text-white transition-all shadow-sm"
+          >
+            Перейти в чат
+          </a>
         </div>
       </section>
 

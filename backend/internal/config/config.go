@@ -7,11 +7,14 @@ import (
 )
 
 type Config struct {
-	Port            string `json:"port"`
-	SpreadsheetID   string `json:"spreadsheetId"`
-	CredentialsFile string `json:"credentialsFile"`
-	TgBotToken      string `json:"tgBotToken"`
-	TgChatID        string `json:"tgChatId"`
+	Port               string `json:"port"`
+	SpreadsheetID      string `json:"spreadsheetId"`
+	CredentialsFile    string `json:"credentialsFile"`
+	TgBotToken         string `json:"tgBotToken"`
+	TgChatID           string `json:"tgChatId"`           // Для RSVP-уведомлений
+	TgCountdownChatID  string `json:"tgCountdownChatId"`  // Для отсчета
+	TgCountdownTopicID string `json:"tgCountdownTopicId"` // Топик (message_thread_id), опционально
+	WeddingDate        string `json:"weddingDate"`        // Дата свадьбы, например "2026-08-08T15:00:00"
 }
 
 func LoadConfig(path string) (*Config, error) {

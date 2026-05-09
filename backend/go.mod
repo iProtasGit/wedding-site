@@ -5,6 +5,7 @@ go 1.21
 require (
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/gofiber/fiber/v2 v2.52.13
+	github.com/robfig/cron/v3 v3.0.1
 	golang.org/x/oauth2 v0.10.0
 	google.golang.org/api v0.134.0
 )

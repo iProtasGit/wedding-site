@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"time"
 
 	"wedding-app/internal/config"
 	delivery "wedding-app/internal/delivery/http"
@@ -12,6 +13,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/robfig/cron/v3"
 )
 
 func main() {
@@ -44,10 +46,31 @@ func main() {
 		log.Fatalf("Failed to initialize repository: %v", err)
 	}
 
-	tgBot := telegram.NewBot(cfg.TgBotToken, cfg.TgChatID)
+	tgBot := telegram.NewBot(cfg.TgBotToken, cfg.TgChatID, cfg.TgCountdownChatID, cfg.TgCountdownTopicID)
 
 	uc := usecase.NewRSVPUseCase(repo, tgBot)
 	handler := delivery.NewRSVPHandler(uc)
+
+	// Setup Cron for daily countdown
+	if tgBot != nil && cfg.TgCountdownChatID != "" && cfg.WeddingDate != "" {
+		// MSK is UTC+3
+		location := time.FixedZone("MSK", 3*60*60)
+		c := cron.New(cron.WithLocation(location))
+
+		// Run every day at 10:00 AM MSK
+		_, err := c.AddFunc("0 10 * * *", func() {
+			log.Println("Sending daily countdown message...")
+			if err := tgBot.SendCountdown(cfg.WeddingDate); err != nil {
+				log.Printf("Failed to send countdown: %v\n", err)
+			}
+		})
+		if err != nil {
+			log.Fatalf("Failed to setup cron: %v", err)
+		}
+
+		c.Start()
+		log.Println("Cron job for daily countdown at 10:00 MSK started.")
+	}
 
 	app := fiber.New()
 

@@ -6,7 +6,7 @@ services:
     container_name: wedding-app
     restart: unless-stopped
     ports:
-      - "8080:8080"
+      - "80:8080"
     volumes:
       - ./backend/config.json:/app/config.json
       - ./backend/credentials.json:/app/credentials.json

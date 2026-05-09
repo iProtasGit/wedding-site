@@ -18,7 +18,10 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o server ./cmd/server/main.go
 # Финальный легковесный образ
 FROM alpine:latest
 # Устанавливаем корневые сертификаты (обязательно для работы Telegram API / HTTPS)
-RUN apk --no-cache add ca-certificates
+# tzdata нужен для правильной работы cron с часовыми поясами (MSK)
+RUN apk --no-cache add ca-certificates tzdata
+# Устанавливаем временную зону по умолчанию
+ENV TZ=Europe/Moscow
 WORKDIR /app
 
 # Копируем собранный сервер
